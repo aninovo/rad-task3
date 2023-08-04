@@ -7,13 +7,17 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UsePipes,
 } from '@nestjs/common';
+import { YupValidationPipe } from '../pipes/yupValidationPipe';
 import {
   NoteModel,
   EditableNoteModel,
   CategoryStatsModel,
 } from './notes.interface';
 import { NotesService } from './notes.service';
+
+import schema from './notes.yup.schema';
 
 @Controller('notes')
 export class NotesController {
@@ -40,6 +44,7 @@ export class NotesController {
 
   // POST /notes Create a note object.
   @Post()
+  @UsePipes(new YupValidationPipe(schema))
   public create(@Body() note: EditableNoteModel): NoteModel {
     return this.notesService.create(note as NoteModel);
   }
@@ -48,7 +53,7 @@ export class NotesController {
   @Patch(':id')
   public update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() note: EditableNoteModel,
+    @Body(new YupValidationPipe(schema)) note: EditableNoteModel,
   ): NoteModel {
     return this.notesService.update(id, note as NoteModel);
   }
