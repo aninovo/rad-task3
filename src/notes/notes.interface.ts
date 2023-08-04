@@ -2,6 +2,7 @@ export interface EditableNoteModel {
   name: string;
   category: string;
   description: string;
+  archived: boolean;
 }
 
 export interface NoteModel extends EditableNoteModel {
@@ -9,3 +10,11 @@ export interface NoteModel extends EditableNoteModel {
   creationDate: Date;
   dates: Date[];
 }
+
+export interface CategoryStatsModel {
+  category: string;
+  active: number;
+  archived: number;
+}
+
+export const noteCategories = ['Idea', 'Random Thought', 'Task'];

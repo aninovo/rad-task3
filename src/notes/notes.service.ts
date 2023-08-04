@@ -1,5 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { NoteModel } from './notes.interface';
+import {
+  CategoryStatsModel,
+  noteCategories,
+  NoteModel,
+} from './notes.interface';
 
 const mock: Array<NoteModel> = [
   {
@@ -9,6 +13,7 @@ const mock: Array<NoteModel> = [
     category: 'Idea',
     description: 'Content',
     dates: [],
+    archived: false,
   },
   {
     id: 1,
@@ -17,6 +22,7 @@ const mock: Array<NoteModel> = [
     category: 'Task',
     description: 'Content',
     dates: [],
+    archived: false,
   },
 ]; // Database mock
 
@@ -88,5 +94,19 @@ export class NotesService {
     }
 
     this.notes.splice(index, 1);
+  }
+
+  public getStats(): Array<CategoryStatsModel> {
+    return noteCategories.map((category) => {
+      return {
+        category: category,
+        active: this.notes.filter(
+          (note) => note.category === category && note.archived === false,
+        ).length,
+        archived: this.notes.filter(
+          (note) => note.category === category && note.archived === false,
+        ).length,
+      };
+    });
   }
 }
