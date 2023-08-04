@@ -8,7 +8,11 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { NoteModel, EditableNoteModel } from './notes.interface';
+import {
+  NoteModel,
+  EditableNoteModel,
+  CategoryStatsModel,
+} from './notes.interface';
 import { NotesService } from './notes.service';
 
 @Controller('notes')
@@ -19,6 +23,13 @@ export class NotesController {
   @Get()
   public findAll(): Array<NoteModel> {
     return this.notesService.findAll();
+  }
+
+  // GET /notes/stats Get aggregated data statistics. You don’t have to mock this data. You need to calculate it based on notes objects you have.
+  // The order of routes is important, this should stay before   @Get(':id') or it will be confused
+  @Get('stats')
+  public getStats(): Array<CategoryStatsModel> {
+    return this.notesService.getStats();
   }
 
   //GET /notes/:id Retrieve item.
@@ -47,6 +58,4 @@ export class NotesController {
   public delete(@Param('id', ParseIntPipe) id: number): void {
     this.notesService.delete(id);
   }
-
-  // TODO get stats
 }
