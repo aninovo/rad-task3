@@ -4,27 +4,8 @@ import {
   noteCategories,
   NoteModel,
 } from './notes.interface';
-
-const mock: Array<NoteModel> = [
-  {
-    id: 0,
-    name: 'A',
-    creationDate: new Date(Date.now()),
-    category: 'Idea',
-    description: 'Content',
-    dates: [],
-    archived: false,
-  },
-  {
-    id: 1,
-    name: 'B',
-    creationDate: new Date(Date.now()),
-    category: 'Task',
-    description: 'Content',
-    dates: [],
-    archived: false,
-  },
-]; // Database mock
+import mock from './notes.mock-data';
+import { extractDatesFromString } from './notes.util';
 
 @Injectable()
 export class NotesService {
@@ -52,6 +33,7 @@ export class NotesService {
     // Init the new object
     const newNote: NoteModel = {
       ...note,
+      dates: extractDatesFromString(note.description),
       id,
     };
 
@@ -78,6 +60,7 @@ export class NotesService {
     const newData: NoteModel = {
       ...oldData,
       ...note,
+      dates: extractDatesFromString(note.description),
     };
 
     this.notes[index] = newData;
